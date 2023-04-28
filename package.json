@@ -1,0 +1,23 @@
+{
+  "name": "kiroku-kun",
+  "version": "1.0.0",
+  "description": "A discord bot that keeps track of user watched videos.",
+  "main": "index.js",
+  "type": "module",
+  "devDependencies": {
+    "eslint": "^8.39.0",
+    "nodemon": "^2.0.22",
+    "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "test": "node dist/index.js",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc -p ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.9.0"
+  }
+}
