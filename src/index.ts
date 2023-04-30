@@ -7,7 +7,8 @@ const client: ExtendedClient = new ExtendedClient({ intents: GatewayIntentBits.G
 //loading env variables
 dotenv.config();
 
-client.start(process.env.DISCORD_TOKEN)
+client.start(process.env.DISCORD_TOKEN);
+
 
 
 

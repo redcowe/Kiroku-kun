@@ -1,7 +1,7 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js"; 
 import { Command } from "../../structs/Command";
 
-export class Ping implements Command {
+export default class Ping implements Command {
     constructor() {}
     data = new SlashCommandBuilder()
             .setName("ping")
