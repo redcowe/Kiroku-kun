@@ -1,4 +1,4 @@
-import { CommandInteraction, SlashCommandBuilder } from "discord.js"; 
+import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js"; 
 import { Command } from "../../structs/Command";
 
 export default class Ping implements Command {
@@ -6,8 +6,7 @@ export default class Ping implements Command {
     data = new SlashCommandBuilder()
             .setName("ping")
             .setDescription("Replies with pong!");
-
-    async execute(interaction: CommandInteraction): Promise<void> {
-      await interaction.reply('Pong!');
+    async execute(interaction: CommandInteraction<CacheType>): Promise<void> {
+      await interaction.reply('Pong! Dong!');
     };
 }
