@@ -7,6 +7,6 @@ export default class Ping implements Command {
             .setName("ping")
             .setDescription("Replies with pong!");
     async execute(interaction: CommandInteraction<CacheType>): Promise<void> {
-      await interaction.reply('Pong! Dong!');
+      await interaction.reply('Pong! Ping!');
     };
 }
