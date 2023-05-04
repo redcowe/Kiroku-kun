@@ -1,5 +1,5 @@
 import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js"; 
-import { Command } from "../../structs/Command";
+import { Command } from "../../types/Command";
 
 export default class Ping implements Command {
     constructor() {}

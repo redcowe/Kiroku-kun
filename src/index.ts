@@ -1,5 +1,5 @@
 import { BaseInteraction, ClientEvents, CommandInteraction, Events, GatewayIntentBits, Message, REST, Routes } from 'discord.js';
-import { ExtendedClient } from './structs/ExtendedClient.js';
+import { ExtendedClient } from './classes/ExtendedClient.js';
 import dotenv from 'dotenv'
 
 (async () => {

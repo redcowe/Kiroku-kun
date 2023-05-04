@@ -1,5 +1,5 @@
 import { Client, ClientOptions, Collection, Events, REST, RESTPostAPIChatInputApplicationCommandsJSONBody, Routes, SlashCommandBuilder } from 'discord.js'
-import { Command } from './Command';
+import { Command } from '../types/Command';
 import { ParsedPath, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { glob } from 'glob'
@@ -45,9 +45,10 @@ export class ExtendedClient extends Client {
 
             for(const file of response) {
                 const command: Command = await this.importFile(file);
-                this.commands.set(command.data.name, command); 
+                this.commands.set(command.data.name, command);                 
                 internalCommands.push(command.data.toJSON());     
             }
+            
             this.registerCommands(this.resolveToken(token), client_id, guild_id, internalCommands)
             return this.commands;      
         })));
