@@ -14,7 +14,7 @@ class LogData implements LoggedInfo {
 }
 
 enum ContentType {
-    MANGA, BOOK, ANIME, YOUTUBE
+    MANGA = "MANGA", BOOK = "BOOK", ANIME = "ANIME", YOUTUBE = "YOUTUBE"
 }
 
 export default class Log implements Command {
@@ -48,7 +48,7 @@ export default class Log implements Command {
                         .setName('link')
                         .setDescription('a link to the content consumed')    
                     );
-                        
+                     
 
     async execute(interaction: CommandInteraction<CacheType>): Promise<void> {
         const logData: LogData = new LogData();
@@ -59,15 +59,15 @@ export default class Log implements Command {
             if (data.name == 'amount') logData.amount = data.value as string;
             if (data.name == 'link') logData.link = data.value as string;
         }
-        log(interaction.user);
-        log(interaction.user.username);
-        await interaction.reply(`Logged ${logData}`);
+        if (logData.type == ContentType.MANGA || logData.type == ContentType.BOOK) this.handleBook(logData, interaction);
+        if (logData.type == ContentType.ANIME || logData.type == ContentType.YOUTUBE)  this.handleVideo(logData, interaction);
+    }   
+
+    private async handleBook(data: LogData, interaction: CommandInteraction<CacheType>) {
+        interaction.reply(`Logged ${data.amount} pages of ${data.title} for ${interaction.user.username}.`);
     }
-
-    private async handleManga(data: LogData, interaction: CommandInteraction<CacheType>) {
-
-        await interaction.reply(`Logged ${data}`)
+            
+    private async handleVideo(data: LogData, interaction: CommandInteraction<CacheType>){
+     interaction.reply(`Logged ${data.amount} minutes for ${interaction.user.username}.`);        
     }
 }
-
-
