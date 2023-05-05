@@ -67,7 +67,7 @@ export default class Log implements Command {
         interaction.reply(`Logged ${data.amount} pages of ${data.title} for ${interaction.user.username}.`);
     }
             
-    private async handleVideo(data: LogData, interaction: CommandInteraction<CacheType>){
+    private async handleVideo(data: LogData, interaction: CommandInteraction<CacheType>) {
      interaction.reply(`Logged ${data.amount} minutes for ${interaction.user.username}.`);        
     }
 }

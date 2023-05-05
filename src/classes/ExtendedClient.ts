@@ -1,10 +1,7 @@
 import { Client, ClientOptions, Collection, Events, REST, RESTPostAPIChatInputApplicationCommandsJSONBody, Routes, SlashCommandBuilder } from 'discord.js'
 import { Command } from '../types/Command';
-import { ParsedPath, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { glob } from 'glob'
-import { promisify } from 'node:util';
-import fs from 'node:fs'
 import path from 'node:path';
 import { log } from 'node:console';
 
@@ -14,8 +11,6 @@ export class ExtendedClient extends Client {
         super(options);
     }
     commands: Collection<string, Command> = new Collection();
-
-    testArray: any[] = [];
 
     private resolveToken(token: string | undefined) {
         if (token === undefined) {
@@ -52,8 +47,6 @@ export class ExtendedClient extends Client {
             this.registerCommands(this.resolveToken(token), client_id, guild_id, internalCommands)
             return this.commands;      
         })));
-        
-        
         
         
         this.login(this.resolveToken(token))
