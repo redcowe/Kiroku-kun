@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id          BigInt           @id
+  id          BigInt        @id
   name        String        @db.VarChar(255)
   videos      Videos[]
   servers     Server[]
@@ -19,24 +19,41 @@ model User {
 }
 
 model Videos {
-  id       Int      @id @default(autoincrement())
-  link     String   @db.VarChar(255)
+  id       Int     @id @default(autoincrement())
+  link     String  @db.VarChar(255)
   duration String
-  User     User?    @relation(fields: [userId], references: [id])
+  User     User?   @relation(fields: [userId], references: [id])
   userId   BigInt?
 }
 
 model UserServers {
-  user      User   @relation(fields: [userId], references: [id])
-  server    Server @relation(fields: [serverId], references: [id])
-  userId    BigInt
-  serverId Int
+  user     User   @relation(fields: [userId], references: [id])
+  server   Server @relation(fields: [serverId], references: [id])
+  userId   BigInt
+  serverId BigInt
+
   @@id([userId, serverId])
 }
 
 model Server {
-  id         Int           @id
-  name        String        @db.VarChar(255)
-  Users       User[]
-  UserServers UserServers[]
+  id             BigInt           @id
+  name           String           @db.VarChar(255)
+  Users          User[]
+  UserServers    UserServers[]
+  ServerChannels ServerChannels[]
+}
+
+model ServerChannels {
+  server    Server  @relation(fields: [serverId], references: [id])
+  channel   Channel @relation(fields: [channelId], references: [id])
+  serverId  BigInt
+  channelId BigInt
+
+  @@id([serverId, channelId])
+}
+
+model Channel {
+  id             BigInt           @id
+  name           String           @db.VarChar()
+  ServerChannels ServerChannels[]
 }
