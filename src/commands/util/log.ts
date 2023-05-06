@@ -52,24 +52,17 @@ export default class Log implements Command {
     }   
 
     private async handleBook(data: MessageData, interaction: CommandInteraction<CacheType>) {
-        log(interaction.user.username, interaction.user.id);
-        log(interaction.guild?.name, interaction.guildId);
-        interaction.reply(`Logged ${data.amount} pages of ${data.title} for ${interaction.user.username}.`);
+        await interaction.reply(`Logged ${data.amount} pages of ${data.title} for ${interaction.user.username}.`);
     }
             
     private async handleVideo(data: MessageData, interaction: CommandInteraction<CacheType>) {
-        log(Date.parse("10:00"));
-        createVideoEntry(data).then((video) => {
-            interaction.reply(`Logged ${video.duration} minutes for ${interaction.user.username}.`);        
-        }).catch((err) => {
-            log(err);
-            interaction.reply("[ERROR] unable to create log. Message josh.#0007 and bother that nigga or sumn idk");
-        });
+        await interaction.deferReply();
+        const video = await createVideoEntry(data);
+        await interaction.followUp(`Logged ${video.duration} minutes for ${interaction.user.username}.`);
     }
 
     private extractCommandInfo(interaction: CommandInteraction<CacheType>) {
         const messageData: MessageData = new MessageData();
-        log(interaction.options.data);
         for (const data of interaction.options.data) {
             if (data.name == 'type') messageData.type = data.value as string;
             if (data.name == 'title') messageData.title = data.value as string;

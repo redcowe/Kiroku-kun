@@ -16,7 +16,7 @@ import dotenv from 'dotenv'
     await client.start(DISCORD_TOKEN, CLIENT_ID, GUILD_ID);
     
     client.on(Events.InteractionCreate, (interaction: BaseInteraction) => {
-        if (interaction.isCommand()) {
+        if (interaction.isCommand() && !interaction.user.bot) {
             try {
                 client.commands.get(interaction.commandName)?.execute(interaction);
             } catch(err) {

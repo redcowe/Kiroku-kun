@@ -16,8 +16,8 @@ async function createUser(data: MessageData) {
 async function createVideo(data: MessageData) {
     const video = await prisma.videos.create({
         data: {
-            link: "test",
-            duration: "10:00",
+            link: data.link as string,
+            duration: data.amount,
             userId: parseInt(data.userId)
         }
     })
@@ -31,5 +31,5 @@ export async function createVideoEntry(data: MessageData) {
         }
     })
     if (userCount == 0) createUser(data);
-    return await createVideo(data);
+    return createVideo(data);
 }
