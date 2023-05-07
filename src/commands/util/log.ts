@@ -1,7 +1,6 @@
 import { SlashCommandBuilder, CommandInteraction, CacheType } from "discord.js";
 import { Command } from "../../types/Command";
 import { log } from "node:console";
-import { MessageData } from "../../classes/MessageData.js";
 import { createVideoEntry } from "../../db/database.js";
 
 ;
@@ -46,33 +45,17 @@ export default class Log implements Command {
                      
 
     async execute(interaction: CommandInteraction<CacheType>): Promise<void> {
-        const messageData = this.extractCommandInfo(interaction);
-        if (messageData.type == ContentType.MANGA || messageData.type == ContentType.BOOK) this.handleBook(messageData, interaction);
-        if (messageData.type == ContentType.ANIME || messageData.type == ContentType.YOUTUBE)  this.handleVideo(messageData, interaction);
+        this.handleVideo(interaction);
     }   
 
-    private async handleBook(data: MessageData, interaction: CommandInteraction<CacheType>) {
-        await interaction.reply(`Logged ${data.amount} pages of ${data.title} for ${interaction.user.username}.`);
+    private async handleBook(interaction: CommandInteraction<CacheType>) {
+        await interaction.reply(`wip : )`);
     }
             
-    private async handleVideo(data: MessageData, interaction: CommandInteraction<CacheType>) {
-        await interaction.deferReply();
-        const video = await createVideoEntry(data);
-        await interaction.followUp(`Logged ${video.duration} minutes for ${interaction.user.username}.`);
+    private async handleVideo(interaction: CommandInteraction<CacheType>) {
+        // await interaction.deferReply();
+        // const video = await createVideoEntry(data);
+        // await interaction.followUp(`Logged ${video.duration} minutes for ${interaction.user.username}.`);
     }
 
-    private extractCommandInfo(interaction: CommandInteraction<CacheType>) {
-        const messageData: MessageData = new MessageData();
-        for (const data of interaction.options.data) {
-            if (data.name == 'type') messageData.type = data.value as string;
-            if (data.name == 'title') messageData.title = data.value as string;
-            if (data.name == 'amount') messageData.amount = data.value as string;
-            if (data.name == 'link') messageData.link = data.value as string;
-        }
-        messageData.username = interaction.user.username;
-        messageData.userId = interaction.user.id;
-        messageData.serverId = interaction.guildId
-        messageData.serverName = interaction.guild?.name
-        return messageData;
-    }
 }
