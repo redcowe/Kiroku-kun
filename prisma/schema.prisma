@@ -12,7 +12,6 @@ datasource db {
 
 model User {
   id          BigInt        @id
-  name        String        @db.VarChar(255)
   videos      Videos[]
   servers     Server[]
   UserServers UserServers[]
@@ -40,20 +39,5 @@ model Server {
   name           String           @db.VarChar(255)
   Users          User[]
   UserServers    UserServers[]
-  ServerChannels ServerChannels[]
 }
 
-model ServerChannels {
-  server    Server  @relation(fields: [serverId], references: [id])
-  channel   Channel @relation(fields: [channelId], references: [id])
-  serverId  BigInt
-  channelId BigInt
-
-  @@id([serverId, channelId])
-}
-
-model Channel {
-  id             BigInt           @id
-  name           String           @db.VarChar()
-  ServerChannels ServerChannels[]
-}
