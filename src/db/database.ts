@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { Message } from "discord.js";
+import { CacheType, CommandInteraction, Message } from "discord.js";
 import { getYoutubeVideoDetails } from "../util/youtube.js";
-
+import moment from "moment"
 export const prisma: PrismaClient = new PrismaClient();
 
 async function createUser(message: Message) {
@@ -10,6 +10,19 @@ async function createUser(message: Message) {
             id: parseInt(message.author.id),
         }
     })
+}
+
+export async function getUserTotalTimeWatch(interaction: CommandInteraction<CacheType>) {
+    const userVideosArray = await prisma.videos.findMany({
+        where: {
+            userId: parseInt(interaction.member?.user.id as string)
+        }
+    })
+    let minutes = 0;
+    userVideosArray.forEach(video => {
+        minutes += moment.duration(video.duration).asMinutes()
+    })
+    return minutes;
 }
 
 async function createVideo(message: Message) {
@@ -38,3 +51,4 @@ export async function createVideoEntry(message: Message) {
         await createVideo(message);
     });
 }
+
