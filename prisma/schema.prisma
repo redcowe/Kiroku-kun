@@ -14,16 +14,18 @@ model User {
   id          BigInt        @id
   videos      Videos[]
   servers     Server[]
+  createdAt   DateTime      @default(now())
   UserServers UserServers[]
 }
 
 model Videos {
-  id       Int     @id @default(autoincrement())
-  link     String  @db.VarChar(255)
-  title String @db.VarChar(255) @default("")
-  duration String
-  User     User?   @relation(fields: [userId], references: [id])
-  userId   BigInt?
+  id        Int      @id @default(autoincrement())
+  link      String   @db.VarChar(255)
+  title     String   @default("") @db.VarChar(255)
+  duration  String
+  createdAt DateTime @default(now())
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    BigInt?
 }
 
 model UserServers {
@@ -36,9 +38,8 @@ model UserServers {
 }
 
 model Server {
-  id             BigInt           @id
-  name           String           @db.VarChar(255)
-  Users          User[]
-  UserServers    UserServers[]
+  id          BigInt        @id
+  name        String        @db.VarChar(255)
+  Users       User[]
+  UserServers UserServers[]
 }
-
