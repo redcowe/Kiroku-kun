@@ -3,6 +3,7 @@ import { ExtendedClient } from './classes/ExtendedClient.js';
 import dotenv from 'dotenv'
 
 import { createVideoEntry } from './db/database.js';
+import WatchedVideos from './commands/util/watchedVideos.js';
 
 
 (async () => {
@@ -21,6 +22,7 @@ import { createVideoEntry } from './db/database.js';
     client.on(Events.InteractionCreate, (interaction: BaseInteraction) => {
         if (interaction.isCommand() && !interaction.user.bot) {
             try {
+                if (interaction.commandName== 'watch_time') new WatchedVideos().execute(interaction);
                 client.commands.get(interaction.commandName)?.execute(interaction);
             } catch(err) {
                 console.error(err);

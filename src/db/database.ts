@@ -1,14 +1,18 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Videos } from "@prisma/client";
 import { CacheType, CommandInteraction, Message } from "discord.js";
 import { getYoutubeVideoDetails } from "../util/youtube.js";
 import moment from "moment"
+import { log } from "console";
 export const prisma: PrismaClient = new PrismaClient();
 
 async function createUser(message: Message) {
+    log(`Creating new user with ID: ${message.author.id}`)
     await prisma.user.create({
         data: {
             id: parseInt(message.author.id),
         }
+    }).catch(err => {
+        log(`Error creating user ${err}`)
     })
 }
 
@@ -23,7 +27,10 @@ async function createVideo(message: Message) {
             title: title,
             userId: parseInt(message.author.id)
         }
+    }).catch(err => {
+        log(`Error creating video: ${err}`)
     })
+    log(`Created video for ${message.author.id} with title ${title}`)
 }
 
 async function getUserCount(id: string) {
@@ -35,12 +42,15 @@ async function getUserCount(id: string) {
 }
 
 export async function getUserWatchedVideos(interaction: CommandInteraction<CacheType>) {
+    log(`Fetching watched videos for ${interaction.options.get('user')?.value}`)
     const userIDFromOptions = interaction.options.get("user")?.value as string;
     const userIDFromInteraction = interaction.user.id;
     return await prisma.videos.findMany({
         where: {
             userId: parseInt(userIDFromOptions == undefined ? userIDFromInteraction : userIDFromOptions)
         }
+    }).catch(err => {
+        log(`Error fetching user videos: ${err}`)
     })
 }
 
@@ -53,7 +63,8 @@ export async function createVideoEntry(message: Message) {
 }
 
 export async function getUserTotalTimeWatch(interaction: CommandInteraction<CacheType>) {
-    const userWatchedVideos = await getUserWatchedVideos(interaction);
+    log(`Getting total watch time for ${interaction.options.get('user')?.value}`)
+    const userWatchedVideos = await getUserWatchedVideos(interaction) as Videos[];
     let amountOfTimeWatched = 0;
     userWatchedVideos.forEach(video => {
         amountOfTimeWatched += moment.duration(video.duration).asMinutes()

@@ -10,13 +10,17 @@ export default class WatchedVideos implements Command {
     currentPage = 1;
     async execute(interaction: CommandInteraction<CacheType>) {
         await interaction.deferReply()
-        const userWatchedVideos = await getUserWatchedVideos(interaction);
+
+        const userWatchedVideos = await getUserWatchedVideos(interaction) as Videos[];
         const response = await interaction.editReply({embeds: [this.createWatchedVideosEmbed(interaction, userWatchedVideos, 1)], components: [this.createWatchedVideosButtons()]});
+        
         const collector = response.createMessageComponentCollector()
         collector.on('collect', async collectorInteraction => {
             await collectorInteraction.deferUpdate()
+            
             const FORWARD = 'forward';
             let totalNumberOfPages = Math.ceil(userWatchedVideos.length / 5);
+
             if (collectorInteraction.customId == FORWARD) {
                 this.currentPage += 1;
                 const buttons = totalNumberOfPages == this.currentPage ? this.createWatchedVideosButtons(true, false) : this.createWatchedVideosButtons(false, false) //if we're at the last page, disable the forward button
