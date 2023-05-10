@@ -45,6 +45,7 @@ export async function getUserWatchedVideos(interaction: CommandInteraction<Cache
     log(`Fetching watched videos for ${interaction.options.get('user')?.value}`)
     const userIDFromOptions = interaction.options.get("user")?.value as string;
     const userIDFromInteraction = interaction.user.id;
+    log(`Fetching watched videos for ${interaction.options.get('user')?.value == undefined ? interaction.user.id : interaction.options.get('user')?.value}`)
     return await prisma.videos.findMany({
         where: {
             userId: parseInt(userIDFromOptions == undefined ? userIDFromInteraction : userIDFromOptions)
