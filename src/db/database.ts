@@ -12,26 +12,15 @@ async function createUser(message: Message) {
     })
 }
 
-export async function getUserTotalTimeWatch(interaction: CommandInteraction<CacheType>) {
-    const userVideosArray = await prisma.videos.findMany({
-        where: {
-            userId: parseInt(interaction.member?.user.id as string)
-        }
-    })
-    let minutes = 0;
-    userVideosArray.forEach(video => {
-        minutes += moment.duration(video.duration).asMinutes()
-    })
-    return minutes;
-}
-
 async function createVideo(message: Message) {
     const apiResponse = await getYoutubeVideoDetails(message.content);
     const duration = apiResponse.data.items?.at(0)?.contentDetails?.duration as string;
+    const title = apiResponse.data.items?.at(0)?.snippet?.title as string;
     await prisma.videos.create({
         data: {
             link: message.content,
             duration: duration,
+            title: title,
             userId: parseInt(message.author.id)
         }
     })
@@ -45,10 +34,30 @@ async function getUserCount(id: string) {
     })
 }
 
+export async function getUserWatchedVideos(interaction: CommandInteraction<CacheType>) {
+    const userIDFromOptions = interaction.options.get("user")?.value as string;
+    const userIDFromInteraction = interaction.user.id;
+    return await prisma.videos.findMany({
+        where: {
+            userId: parseInt(userIDFromOptions == undefined ? userIDFromInteraction : userIDFromOptions)
+        }
+    })
+}
+
+
 export async function createVideoEntry(message: Message) {
     getUserCount(message.author.id).then(async (response) => {
         if (response == 0) await createUser(message);
         await createVideo(message);
     });
+}
+
+export async function getUserTotalTimeWatch(interaction: CommandInteraction<CacheType>) {
+    const userWatchedVideos = await getUserWatchedVideos(interaction);
+    let amountOfTimeWatched = 0;
+    userWatchedVideos.forEach(video => {
+        amountOfTimeWatched += moment.duration(video.duration).asMinutes()
+    })
+    return amountOfTimeWatched;
 }
 

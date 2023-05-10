@@ -5,7 +5,7 @@ import { getUserTotalTimeWatch } from "../../db/database.js";
 export default class Stats implements Command {
     data = new SlashCommandBuilder()
                 .setName("watch_time")
-                .setDescription("Gets stats for a given user")
+                .setDescription("Gets watch time in minutes for a given user")
                 .addUserOption(option => 
                     option
                     .setName("user")
@@ -14,8 +14,9 @@ export default class Stats implements Command {
                 )
 
     async execute(interaction: CommandInteraction<CacheType>) {
-        const stats = (await getUserTotalTimeWatch(interaction)).toPrecision(5);
-        await interaction.reply(`<@${interaction.options.get("user")?.value}> has watched ${stats} minutes of content.`);    
+        await interaction.deferReply()
+        const watchTimeInMinutes = (await getUserTotalTimeWatch(interaction)).toPrecision(5);
+        await interaction.editReply(`<@${interaction.options.get("user")?.value}> has watched ${watchTimeInMinutes} minutes of content.`);    
     }
 
 }

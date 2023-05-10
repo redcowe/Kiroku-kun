@@ -14,7 +14,7 @@ import { createVideoEntry } from './db/database.js';
     const GUILD_ID = process.env.GUILD_ID as string;
 
     const client: ExtendedClient = new ExtendedClient({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
-    //loading env variables
+    
 
     await client.start(DISCORD_TOKEN, CLIENT_ID, GUILD_ID);
     
