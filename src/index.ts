@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 
 import { createVideoEntry } from './db/database.js';
 import WatchedVideos from './commands/util/watchedVideos.js';
+import { log } from 'console';
 
 
 (async () => {
@@ -22,7 +23,8 @@ import WatchedVideos from './commands/util/watchedVideos.js';
     client.on(Events.InteractionCreate, (interaction: BaseInteraction) => {
         if (interaction.isCommand() && !interaction.user.bot) {
             try {
-                if (interaction.commandName== 'watch_time') new WatchedVideos().execute(interaction);
+                if (interaction.commandName === 'watched_videos') return new WatchedVideos().execute(interaction);
+                
                 client.commands.get(interaction.commandName)?.execute(interaction);
             } catch(err) {
                 console.error(err);
