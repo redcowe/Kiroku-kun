@@ -1,2 +1,2 @@
 # Kiroku-kun
-A discord bot that keeps track of user watched videos.
+A discord bot that keeps track of user watched videos with commands.
